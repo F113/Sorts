@@ -1,49 +1,33 @@
-import random
-import time
-import datetime
-import sys
+from sort import Sort
 
-count = 100;
+count = 1000;
 
-print('Hi, its insertion sort!')
-print('Count: ' + str(count))
+class InsertionSort(Sort):
+  def __init__(self, count):
+    self.type = 'insertion'
+    Sort.__init__(self, count)
 
-#generate random list
-numbers = []
-for x in range(count):
-  numbers.append(random.randint(1,1000))
-print('Source list:')
-print(numbers)
+  def sort(self):
+    sorted = []
+    sorted.insert(0, self.numbers.pop())
+    for x in self.numbers:
+      self.insert_order(sorted, x)
+    self.numbers = sorted
 
-# start time
-start_time = int(round(time.time() * 1000))
+  def insert_order(self, list, ins):
+    for z in list:
+      if z > ins:
+        list.insert(list.index(z), ins)
+        return
+    list.append(ins)
 
-# create new sorted list
-sorted = []
-# first insertion
-sorted.insert(0, numbers.pop())
-
-def insert_order(list, ins):
-  for z in list:
-    if z > ins:
-      list.insert(list.index(z), ins)
-      return
-  list.append(ins)
-
-for x in numbers:
-  insert_order(sorted, x)
-
-print('Sorted list:')
-print(sorted)
-
-# end time
-end_time = int(round(time.time() * 1000))
-
-print('Time:')
-print(end_time - start_time)
+s = InsertionSort(count)
+s.execute()
 
 # results:
-# 1000 ~ 60ms
-# 10000 ~ 1700ms
-# 20000 ~ 6500ms
-# 100000 ~ too long :)
+# 1000 ~ 10ms
+# 10000 ~ 950ms
+# 20000 ~ 4000ms
+
+# O(n^2)
+

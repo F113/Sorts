@@ -1,58 +1,44 @@
-import random
-import time
-import datetime
-import sys
+from sort import Sort
 
-count = 1000;
+count = 100000;
 
-print('Hi, its merge sort!')
-print('Count: ' + str(count))
+class MergeSort(Sort):
+  def __init__(self, count):
+    self.type = 'merge'
+    Sort.__init__(self, count)
 
-#generate random list
-numbers = []
-for x in range(count):
-  numbers.append([random.randint(1,1000)])
-print('Source list:')
-print(numbers)
+  def sort(self):
+    
+    while len(self.numbers) > 1:
+      a1 = self.numbers.pop(0)
+      a2 = self.numbers.pop(0)
+      if isinstance(a1, int):
+        a1 = [a1]
+      if isinstance(a2, int):
+        a2 = [a2]
+      self.numbers.append(self.merge(a1,a2))
 
-# start time
-start_time = int(round(time.time() * 1000))
+  def merge(self, a1, a2):
+    result = []
+    while (not len(a1) == 0 or not len(a2) == 0):
+      if len(a1) == 0:
+        result.append(a2.pop(0))
+      elif (len(a2) == 0):
+        result.append(a1.pop(0))
+      elif (a1[0] > a2[0]):
+        result.append(a2.pop(0))
+      else:
+        result.append(a1.pop(0))
+    return result
 
-# create new sorted list
-#sorted = []
-# first insertion
-#sorted.insert(0, numbers.pop())
-
-def merge(arr1, arr2):
-  result = []
-  while (not len(arr1) == 0 or not len(arr2) == 0):
-    if len(arr1) == 0:
-      result.append(arr2.pop(0))
-    elif (len(arr2) == 0):
-      result.append(arr1.pop(0))
-    elif (arr1[0] > arr2[0]):
-      result.append(arr2.pop(0))
-    else:
-      result.append(arr1.pop(0))
-  return result
-
-while len(numbers) > 1:
-  a1 = numbers.pop(0)
-  a2 = numbers.pop(0)
-  numbers.append(merge(a1,a2))
-
-print('Sorted list:')
-print(numbers)
-
-# end time
-end_time = int(round(time.time() * 1000))
-
-print('Time:')
-print(end_time - start_time)
+s = MergeSort(count)
+s.execute()
 
 # results:
 # 1000 ~ 10ms
-# 10000 ~ 170ms
+# 10000 ~ 130ms
 # 20000 ~ 475ms
-# 50000 ~ 2154ms
-# good!
+# 50000 ~ 2150ms
+# 100000 ~ 7800ms
+
+# O(nlgn) 
